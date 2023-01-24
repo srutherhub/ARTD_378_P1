@@ -1,51 +1,55 @@
-ParticleSystem ps;
-
 PImage david;
+
+
+float accelerate = 100.0;
+
 
 void setup(){
   size(1280,720,P3D);
-  ps = new ParticleSystem(new PVector(0, 0));
+  //frameRate(10.0);
+  //fullScreen(P3D);
+
   david = loadImage("david_0.png");
   david.resize(height,height);
+  
   image(david,0,0);
   loadPixels();
-  background(0,0,0,0);
+  background(0);
+  
   noStroke();
-
-
 }
 
 void draw(){
+  //println(frameCount);
   background(0);
-  
-  
-  //fill(255,0,0);
   translate(width/2,height/2);
-  rotateY(radians(millis())/100.0);
+  //rotateY(radians(millis())/100.0);
   //sphere(20);
   push();
   translate(-width/4,-height/2.5,-300);
-
-  drawDavid();
+    drawDavid();
   pop();
-  
 
 }
 
 void drawDavid(){
-  int pixelSize = 3;
+  accelerate += 0.02;
+  float move = noise(accelerate)*50.0;
+  //println(move);
+  int pixelSize = 10;
   for(int gridX=0;gridX<width/2;gridX+=pixelSize){
       for(int gridY=0;gridY<width/2;gridY+=pixelSize){
         int kolor = pixels[gridY*width+gridX];
         fill(kolor);
         push();
-        translate(gridX,gridY,brightness(kolor));
-        box(pixelSize);
-        //translate(0,0,modelZ(10,10,10));
-         ps.addParticle();
-         ps.run();
+          translate(gridX,gridY,brightness(kolor));
+          //square(0,0,pixelSize);
+          square(0,move,pixelSize);
+          square(move,0,pixelSize);
+          square(0,-move,pixelSize);
+          square(-move,0,pixelSize);
         pop();
-        
       }
   }
 }
+
